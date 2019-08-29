@@ -4,34 +4,47 @@ print("Ingrese cantidad de particiones");
 cantParticiones=int(input())
 
 sistOp=tamMemoria//10
-idParticionActual=1
+idParticionActual=0
 posicionActualMemoria=sistOp
 #Crear memoria vacia
 memoria=[]
 tablaParticiones=[]
 tablaProcesos=[]
 i = 0
-
-def bestFit(tabla,sizeProceso):
-    mejorparticion=10000 #MaxValue
-    for i in tabla:
-        if i[3] == False:
-            if (i[2]-i[1]) > sizeProceso and i[2]-i[1] < mejorparticion:
-                mejorparticion=i[0]
-    if mejorparticion==10000:
-        return False
-    else:
-        tabla[mejorparticion][3]=True
-        tabla[mejorparticion][4]= len(tablaProcesos)
-        tablaProcesos.append([tabla[mejorparticion][4],mejorparticion])
-        return True
-
-def imprimeTabla(tabla):
-    print("Tabla de Particiones")
-    print("ID    Inicio    Fin    Estado     Proceso")
+def imprimeProcesos(tabla):
+    print("Tabla de Procesos")
+    print("ID    Particion    Tamano")
     print("-------------------------------------")
     for i in tabla:
         print(i)
+    print("----------------------------------------")
+
+def bestFit(tabla,sizeProceso):
+    mejorParticion=-1 #MaxValue
+    tamanoMejorParticion=10000
+    for i in tabla:
+        if i[3] == False:
+            print("Particion "+str(i[0])+"... Analizando")
+            if i[5] >= sizeProceso and i[5] <= tamanoMejorParticion:
+                mejorParticion=i[0]
+                tamanoMejorParticion=i[5]
+    if mejorParticion==-1:
+        return False
+    else:
+        print(tamanoMejorParticion)
+        tabla[mejorParticion][3]=True
+        tabla[mejorParticion][4]= len(tablaProcesos)
+        tablaProcesos.append([tabla[mejorParticion][4],mejorParticion,sizeProceso])
+        imprimeProcesos(tablaProcesos)
+        return True
+    
+
+def imprimeTabla(tabla):
+    print("Tabla de Particiones")
+    print("ID    Inicio    Fin    Estado     Proceso  Tamano")
+    print("-------------------------------------")
+    for i in tabla:
+        print(i,end=" ")
     print("----------------------------------------")
 def imprimememoria(mem):
     print("Memoria")
@@ -54,7 +67,7 @@ while continuar and cantParticiones > 0:
         print("Ingresar tamano de particion")
         tamanoNuevaParticion=int(input())
         if tamanoNuevaParticion <= (tamanoRestanteMemoria-cantParticiones) and tamanoNuevaParticion > 0:#esto se asegura de dejar aunque sea un byte para cada particion restante.
-            tablaParticiones.append([idParticionActual,posicionActualMemoria,posicionActualMemoria+tamanoNuevaParticion,False,-1])
+            tablaParticiones.append([idParticionActual,posicionActualMemoria,posicionActualMemoria+tamanoNuevaParticion-1,False,-1, tamanoNuevaParticion])
             for i in range(posicionActualMemoria,posicionActualMemoria+tamanoNuevaParticion):
                 memoria[i]=idParticionActual
             posicionActualMemoria+=tamanoNuevaParticion

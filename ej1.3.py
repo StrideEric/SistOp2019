@@ -1,3 +1,10 @@
+IDPart=0
+Inicio=1
+Fin=2
+Estado=3
+Proceso=4
+Tamano=5
+IntCompact=6
 print("Ingrese tamano de memoria");
 tamMemoria=int(input())
 print("Ingrese cantidad de particiones");
@@ -27,7 +34,7 @@ def bestFit(tabla,sizeProceso):
             print("Particion "+str(i[0])+"... Analizando")
             if i[5] >= sizeProceso and i[5] <= tamanoMejorParticion:
                 mejorParticion=i[0]
-                tamanoMejorParticion=i[5]
+                tamanoMejorParticion=i[Tamano]
     if mejorParticion==-1:
         return False
     else:
@@ -35,17 +42,17 @@ def bestFit(tabla,sizeProceso):
         tabla[mejorParticion][3]=True
         tabla[mejorParticion][4]= len(tablaProcesos)
         tablaProcesos.append([tabla[mejorParticion][4],mejorParticion,sizeProceso])
+        tabla[mejorParticion][IntCompact]=tabla[mejorParticion][Tamano]-sizeProceso
         imprimeProcesos(tablaProcesos)
         return True
     
 
 def imprimeTabla(tabla):
     print("Tabla de Particiones")
-    print("ID    Inicio    Fin    Estado     Proceso  Tamano")
+    print("ID    Inicio    Fin    Estado     Proceso  Tamano   Compactacion int")
     print("-------------------------------------")
     for i in tabla:
-        print(i, end=" ")
-        print("")
+        print("        ".join(str(x) for x in i))
     print("----------------------------------------")
 def imprimememoria(mem):
     print("Memoria")
@@ -68,7 +75,7 @@ while continuar and cantParticiones > 0:
         print("Ingresar tamano de particion")
         tamanoNuevaParticion=int(input())
         if tamanoNuevaParticion <= (tamanoRestanteMemoria-cantParticiones) and tamanoNuevaParticion > 0:#esto se asegura de dejar aunque sea un byte para cada particion restante.
-            tablaParticiones.append([idParticionActual,posicionActualMemoria,posicionActualMemoria+tamanoNuevaParticion-1,False,-1, tamanoNuevaParticion])
+            tablaParticiones.append([idParticionActual,posicionActualMemoria,posicionActualMemoria+tamanoNuevaParticion-1,False,-1, tamanoNuevaParticion,-1])
             for i in range(posicionActualMemoria,posicionActualMemoria+tamanoNuevaParticion):
                 memoria[i]=idParticionActual
             posicionActualMemoria+=tamanoNuevaParticion

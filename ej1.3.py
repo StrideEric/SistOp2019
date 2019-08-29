@@ -44,7 +44,8 @@ def imprimeTabla(tabla):
     print("ID    Inicio    Fin    Estado     Proceso  Tamano")
     print("-------------------------------------")
     for i in tabla:
-        print(i,end=" ")
+        print(i, end=" ")
+        print("")
     print("----------------------------------------")
 def imprimememoria(mem):
     print("Memoria")

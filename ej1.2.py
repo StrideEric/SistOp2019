@@ -18,6 +18,7 @@ memoria=[]
 tablaParticiones=[]
 tablaProcesos=[]
 i = 0
+
 def imprimeProcesos(tabla):
     print("Tabla de Procesos")
     print("ID    Particion    Tamano")
